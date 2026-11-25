@@ -1,0 +1,108 @@
+onboarding = false
+
+[theme]
+name = "catppuccin"
+auto_switch = false
+
+[ui]
+# Title herdr writes to the terminal it runs in, which is what the Ghostty
+# titlebar and tab bar read. Default is "{hostname}: {workspace}"; {hostname}
+# resolves to the machine hostname, which can be
+# unreadable. Tokens: {hostname}, {workspace}, {tab}, {pane}, {terminal_title}.
+window_title = "ghostty:{workspace}"
+
+# ---------------------------------------------------------------------------
+# Keybindings
+#
+# Every binding below is an ARRAY: herdr's prefix default first, then a direct
+# chord. Nothing is removed, so prefix+<key> keeps working exactly as documented
+# and the direct chords are pure additions.
+#
+# Why ctrl+alt for the direct chords: it is the one modifier family that is free
+# here. Verified on this machine — Ghostty ships no ctrl+alt defaults, no enabled
+# macOS system hotkey uses ctrl+option, and VoiceOver (which claims ctrl+option
+# as its modifier) is off. Plain ctrl+<letter> was rejected deliberately: this
+# zsh uses the emacs keymap, where ^X is a prefix (^X^E = edit-command-line),
+# ^W = backward-kill-word, ^T = transpose-chars, ^Q = push-line, ^_ = undo, and
+# ^Z is SIGTSTP. Binding those in herdr would steal them from every shell,
+# editor and agent running inside a pane.
+# ---------------------------------------------------------------------------
+[keys]
+
+# --- Splits -----------------------------------------------------------------
+# Bound by glyph mnemonic. herdr's action names read the opposite way:
+# split_vertical = side by side, split_horizontal = stacked.
+#   -       -> panes stacked      (divider looks like -)
+#   | and \ -> panes side by side (divider looks like |)
+# \ is the same physical key as | but needs no shift, so it survives terminals
+# and layouts that mangle shifted punctuation.
+split_horizontal = ["prefix+minus", "ctrl+-", "ctrl+alt+-"]
+split_vertical = ["prefix+v", "ctrl+|", "ctrl+alt+\\"]
+
+# --- Pane lifecycle ---------------------------------------------------------
+close_pane = ["prefix+x", "ctrl+alt+x"]        # x = close
+zoom = ["prefix+z", "ctrl+alt+z"]              # z = zoom
+
+# --- Pane focus: vim directions ---------------------------------------------
+focus_pane_left = ["prefix+h", "ctrl+alt+h"]
+focus_pane_down = ["prefix+j", "ctrl+alt+j"]
+focus_pane_up = ["prefix+k", "ctrl+alt+k"]
+focus_pane_right = ["prefix+l", "ctrl+alt+l"]
+
+# Same letters plus shift move the pane instead of the focus.
+swap_pane_left = ["prefix+shift+h", "ctrl+alt+shift+h"]
+swap_pane_down = ["prefix+shift+j", "ctrl+alt+shift+j"]
+swap_pane_up = ["prefix+shift+k", "ctrl+alt+shift+k"]
+swap_pane_right = ["prefix+shift+l", "ctrl+alt+shift+l"]
+
+# Focus the previously focused pane, across tabs and workspaces. Unset by
+# default in herdr; this is the alt+tab of panes.
+last_pane = ["prefix+semicolon", "ctrl+alt+semicolon"]
+
+# --- Pane resize ------------------------------------------------------------
+# Unset by default (prefix+r enters a modal resize mode, which still works).
+# Direct arrows resize without entering a mode.
+resize_pane_left = "ctrl+alt+left"
+resize_pane_down = "ctrl+alt+down"
+resize_pane_up = "ctrl+alt+up"
+resize_pane_right = "ctrl+alt+right"
+
+# --- Tabs -------------------------------------------------------------------
+new_tab = ["prefix+c", "ctrl+alt+t"]           # t = tab
+close_tab = ["prefix+shift+x", "ctrl+alt+w"]   # w = close, browser muscle memory
+next_tab = ["prefix+n", "ctrl+alt+]"]
+previous_tab = ["prefix+p", "ctrl+alt+["]
+
+# Rename = the create chord plus shift. ctrl+alt+t makes a tab,
+# ctrl+alt+shift+t renames it.
+rename_tab = ["prefix+shift+t", "ctrl+alt+shift+t"]
+
+# Reorder the active tab. Unset by default.
+move_tab_next = "ctrl+alt+shift+]"
+move_tab_previous = "ctrl+alt+shift+["
+
+# --- Text and scrollback ----------------------------------------------------
+copy_mode = ["prefix+[", "ctrl+alt+c"]         # c = copy
+edit_scrollback = ["prefix+e", "ctrl+alt+e"]   # e = edit, opens $EDITOR
+
+# --- Navigation and session -------------------------------------------------
+new_workspace = ["prefix+shift+n", "ctrl+alt+n"]
+
+# Same create-plus-shift rule one level up: ctrl+alt+n makes a workspace,
+# ctrl+alt+shift+n renames it. The rename lands on the workspace the sidebar has
+# selected, which is the focused one unless you are navigating the sidebar.
+rename_workspace = ["prefix+shift+w", "ctrl+alt+shift+n"]
+
+# Previous / next workspace. Unset by default in herdr. The sidebar stacks
+# workspaces vertically and navigate mode already uses up/down for them, so
+# vertical arrows match the mental model. ctrl+alt+arrows (no shift) resize the
+# pane, so shift is what promotes the gesture from pane level to workspace level.
+previous_workspace = ["prefix+shift+up", "ctrl+alt+shift+up"]
+next_workspace = ["prefix+shift+down", "ctrl+alt+shift+down"]
+goto = ["prefix+g", "ctrl+alt+g"]              # g = goto, session navigator
+toggle_sidebar = ["prefix+b", "ctrl+alt+b"]    # b = bar
+detach = ["prefix+q", "ctrl+alt+q"]            # q = quit this client, leave it running
+
+# ctrl+alt+1 .. ctrl+alt+9 jump straight to a tab, like cmd+1..9 in a browser.
+[keys.indexed]
+tabs = "ctrl+alt"

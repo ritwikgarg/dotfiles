@@ -1,0 +1,52 @@
+# Ghostty config — https://ghostty.org/docs/config
+# Reload in place with cmd+shift+, (or restart Ghostty).
+
+# Font
+font-family = JetBrainsMono Nerd Font Mono
+font-size = 14
+font-thicken = true
+adjust-cell-height = 12%
+
+# Theme
+theme = Catppuccin Mocha
+background-opacity = 0.96
+background-blur-radius = 20
+
+# Window
+window-padding-x = 12
+window-padding-y = 8
+window-padding-balance = true
+macos-titlebar-style = tabs
+window-save-state = always
+
+# SSH: install Ghostty's terminfo on remote hosts automatically and propagate
+# COLORTERM/TERM_PROGRAM. Falls back to xterm-256color if remote `tic` is missing.
+# Off by default in Ghostty (no-ssh-env,no-ssh-terminfo).
+shell-integration-features = cursor,no-sudo,title,ssh-env,ssh-terminfo,path
+
+# Cursor
+cursor-style = bar
+cursor-style-blink = false
+mouse-hide-while-typing = true
+
+# Scrollback (agents produce a lot of output)
+scrollback-limit = 100000
+
+# Make alt behave like a real Alt/Meta key so shell + TUI keybinds work
+macos-option-as-alt = true
+
+# Copy on select, paste protection for multiline pastes
+copy-on-select = clipboard
+clipboard-paste-protection = true
+
+# herdr — attach the agent multiplexer in every new window/tab.
+# Absolute path is required: Ghostty inherits launchd's PATH (/usr/bin:/bin:/usr/sbin:/sbin),
+# which does not include /opt/homebrew/bin.
+# The `|| exec` fallback drops you into a login shell if herdr fails to start,
+# so a broken pre-1.0 herdr can never leave you with an unusable terminal.
+command = shell:/opt/homebrew/bin/herdr || exec /bin/zsh -l
+
+# Splits (Ghostty's own, for when you are not inside a multiplexer)
+keybind = cmd+d=new_split:right
+keybind = cmd+shift+d=new_split:down
+keybind = cmd+shift+enter=toggle_split_zoom

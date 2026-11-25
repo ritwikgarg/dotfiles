@@ -1,0 +1,150 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = true
+command_timeout = 1000
+
+format = """
+${custom.host_local}\
+${custom.aws_prod}\
+$directory\
+$git_branch$git_status\
+$java$nodejs$python$rust$golang\
+$aws\
+$line_break\
+$jobs$character"""
+
+right_format = """${status}${cmd_duration}${git_metrics}${battery}${time}"""
+
+[character]
+success_symbol = '[❯](bold #cba6f7)'
+error_symbol = '[❯](bold #f38ba8)'
+vimcmd_symbol = '[❮](bold #a6e3a1)'
+
+[directory]
+style = 'bold #89b4fa'
+truncation_length = 3
+truncate_to_repo = true
+truncation_symbol = '…/'
+read_only = ' 󰌾'
+format = '[$path]($style)[$read_only]($read_only_style) '
+
+[git_branch]
+symbol = ' '
+style = 'bold #f5c2e7'
+format = 'on [$symbol$branch]($style) '
+
+[git_status]
+style = 'bold #f9e2af'
+format = '([$all_status$ahead_behind]($style) )'
+conflicted = '= '
+ahead = '⇡${count} '
+behind = '⇣${count} '
+diverged = '⇕⇡${ahead_count}⇣${behind_count} '
+untracked = '? '
+stashed = '$ '
+modified = '! '
+staged = '+ '
+renamed = '» '
+deleted = '✘ '
+
+[cmd_duration]
+min_time = 2000
+format = '[took $duration]($style) '
+style = 'dimmed #a6adc8'
+
+[time]
+disabled = false
+time_format = '%H:%M'
+format = '[ $time]($style)'
+style = 'dimmed #6c7086'
+
+# Exit code of the last command, only when it failed.
+[status]
+disabled = false
+symbol = '✗ '
+sigint_symbol = '✗ '
+signal_symbol = '✗ '
+# Shows both the raw code and its meaning: "✗ 127 NOTFOUND", "✗ 130 INT".
+format = '[$symbol$int $common_meaning$signal_name]($style) '
+style = 'bold #f38ba8'
+map_symbol = false
+recognize_signal_code = true
+
+# Uncommitted churn in the current repo: +added / -deleted lines.
+[git_metrics]
+disabled = false
+added_style = 'bold #a6e3a1'
+deleted_style = 'bold #f38ba8'
+format = '([+$added]($added_style) )([-$deleted]($deleted_style) )'
+
+# Only surfaces when the battery is actually low.
+[battery]
+full_symbol = ' '
+charging_symbol = ' '
+discharging_symbol = ' '
+unknown_symbol = ' '
+empty_symbol = ' '
+format = '[$symbol$percentage]($style) '
+
+[[battery.display]]
+threshold = 12
+style = 'bold #f38ba8'
+
+[[battery.display]]
+threshold = 30
+style = 'bold #f9e2af'
+
+[jobs]
+symbol = ' '
+style = 'bold #94e2d5'
+number_threshold = 1
+
+[aws]
+symbol = '  '
+style = 'bold #f9e2af'
+format = 'on [$symbol($profile )(\($region\) )]($style)'
+# false: only show when AWS credentials are actually active.
+force_display = false
+
+[java]
+symbol = ' '
+style = 'bold #fab387'
+
+[nodejs]
+symbol = ' '
+style = 'bold #a6e3a1'
+
+[python]
+symbol = ' '
+style = 'bold #f9e2af'
+
+[rust]
+symbol = ' '
+style = 'bold #fab387'
+
+[golang]
+symbol = ' '
+style = 'bold #89dceb'
+
+# Small badge so the prompt shows which machine you're on.
+[custom.host_local]
+description = 'Local Mac'
+os = 'macos'
+# `os` filters, but a custom module still needs a display condition to render at
+# all; `true` is a shell builtin, so this is cheaper than probing uname.
+when = 'true'
+command = 'printf " mac"'
+shell = ['sh']
+style = 'bold #6c7086'
+format = '[$output]($style) '
+
+
+# Loud badge when the active AWS profile looks like production.
+[custom.aws_prod]
+description = 'Warn when AWS_PROFILE looks like prod'
+when = 'test -n "$AWS_PROFILE" && echo "$AWS_PROFILE" | grep -Eqi "prod|prd"'
+command = 'printf " PROD "'
+shell = ['sh']
+style = 'bold bg:#f38ba8 fg:#11111b'
+format = '[$output]($style) '
+

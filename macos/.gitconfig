@@ -1,0 +1,7 @@
+[user]
+	name = Ritwik Garg
+	email = gargritwik08@gmail.com
+[core]
+	pager =
+[pull]
+	rebase = true
